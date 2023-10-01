@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func RunLengthEncode(s string) string {
+func Encode(s string) string {
 	encoded := strings.Builder{}
 
 	for i := 0; i < len(s); i++ {
@@ -27,7 +27,7 @@ func RunLengthEncode(s string) string {
 	return encoded.String()
 }
 
-func RunLengthDecode(s string) (string, error) {
+func Decode(s string) (string, error) {
 	decoded := strings.Builder{}
 
 	split := strings.Split(s, ",")
