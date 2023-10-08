@@ -1,6 +1,7 @@
 package huffman
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"sort"
@@ -24,6 +25,7 @@ func NewTree(endLeafs []*Leaf) *Tree {
 				continue
 			}
 			parent.freq += tree.leafs[i].freq
+			parent.value += tree.leafs[i].value
 			if parent.left == nil {
 				parent.left = tree.leafs[i]
 				tree.leafs[i].parent = parent
@@ -46,10 +48,6 @@ func NewTree(endLeafs []*Leaf) *Tree {
 	return &tree
 }
 
-func (tree *Tree) getLeafs() []*Leaf {
-	return tree.leafs
-}
-
 func (tree *Tree) Decode(r BitReader) (string, error) {
 	builder := strings.Builder{}
 	root := tree.getRoot()
@@ -69,8 +67,8 @@ func (tree *Tree) Decode(r BitReader) (string, error) {
 			leaf = leaf.left
 		}
 
-		if leaf.rune != 0 {
-			builder.WriteRune(leaf.rune)
+		if leaf.value != "" {
+			builder.WriteString(leaf.value)
 			leaf = root
 		}
 	}
@@ -78,19 +76,28 @@ func (tree *Tree) Decode(r BitReader) (string, error) {
 
 func (tree *Tree) Encode(s string, w BitWriter) error {
 	for _, r := range []rune(s) {
-		for _, l := range tree.leafs {
-			if l.rune == r {
-				if err := tree.writeBinaryValueOfLeaf(l, w); err != nil {
-					return err
-				}
-				break
-			}
+		l, err := tree.GetLeafForRune(r)
+		if err != nil {
+			return err
+		}
+		if err := tree.WriteBinaryValueOfLeaf(l, w); err != nil {
+			return err
 		}
 	}
 	return nil
 }
 
-func (tree *Tree) writeBinaryValueOfLeaf(leaf *Leaf, w BitWriter) error {
+func (tree *Tree) GetLeafForRune(r rune) (*Leaf, error) {
+	value := string(r)
+	for _, l := range tree.leafs {
+		if l.value == value {
+			return l, nil
+		}
+	}
+	return nil, errors.New(fmt.Sprintf("could not find value %s in tree", string(r)))
+}
+
+func (tree *Tree) WriteBinaryValueOfLeaf(leaf *Leaf, w BitWriter) error {
 	parent := leaf.parent
 	for {
 		if parent == nil {
@@ -140,7 +147,7 @@ type Leaf struct {
 	right  *Leaf
 	parent *Leaf
 	freq   int
-	rune   rune
+	value  string
 }
 
 func CalculateValueLeafs(s string) []*Leaf {
@@ -148,15 +155,16 @@ func CalculateValueLeafs(s string) []*Leaf {
 
 	for _, r := range []rune(s) {
 		alreadyExists := false
+		value := string(r)
 		for i := range leafs {
-			if r == leafs[i].rune {
+			if value == leafs[i].value {
 				leafs[i].freq++
 				alreadyExists = true
 				break
 			}
 		}
 		if !alreadyExists {
-			leafs = append(leafs, &Leaf{rune: r, freq: 1})
+			leafs = append(leafs, &Leaf{value: value, freq: 1})
 		}
 	}
 
@@ -168,8 +176,8 @@ func CalculateValueLeafs(s string) []*Leaf {
 }
 
 func (l Leaf) String() string {
-	if l.rune == 0 {
-		return fmt.Sprintf("leaf(left %v, right %v, parent %v)", l.left, l.right, l.parent)
+	if l.left == nil && l.right == nil {
+		return fmt.Sprintf("leaf(value %s, freq %v, parent %v)", l.value, l.freq, l.parent)
 	}
-	return fmt.Sprintf("leaf(value %s, freq %v, parent %v)", string(l.rune), l.freq, l.parent)
+	return fmt.Sprintf("leaf(value %s, freq %v, parent %v, left %v, right %v)", l.value, l.freq, l.parent, l.left, l.right)
 }
