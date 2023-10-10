@@ -123,11 +123,15 @@ wooooooow this is short
    ```
    w    o  o  o  o  o  o  o  w        t   h   i   s       i   s       s   h   o  r    t
    0111-11-11-11-11-11-11-11-0111-100-000-001-010-101-100-010-101-100-101-001-11-0110-000
+   
+   011111111111111111011110000000110101100010101100101001110110000
    ```
    
-   This results in 152 bits or 19 bytes. The decoded text exists as 39 bytes.
+   This results in 63 bits or 8 bytes. The decoded text exists as 23 bytes.
 
 5. To decode the string just follow the same path in the tree.
    
    ```
+   0111111111111111110111100000001010101100010101100101001110110000
+   w   o o o o o o o w      t  h  i  s     i  s     s  h  o r   t
    ```
