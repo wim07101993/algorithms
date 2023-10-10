@@ -67,7 +67,7 @@ func (tree *Tree) Decode(r BitReader) (string, error) {
 			leaf = leaf.left
 		}
 
-		if leaf.value != "" {
+		if leaf.left == nil || leaf.right == nil {
 			builder.WriteString(leaf.value)
 			leaf = root
 		}
@@ -99,24 +99,35 @@ func (tree *Tree) GetLeafForRune(r rune) (*Leaf, error) {
 
 func (tree *Tree) WriteBinaryValueOfLeaf(leaf *Leaf, w BitWriter) error {
 	parent := leaf.parent
+	var bits []bool
 	for {
 		if parent == nil {
-			return nil
+			break
 		}
 
-		var err error
 		if leaf == parent.left {
-			err = w.WriteZero()
+			bits = append(bits, false)
 		} else {
-			err = w.WriteOne()
+			bits = append(bits, true)
 		}
 
-		if err != nil {
-			return err
-		}
 		leaf = parent
 		parent = leaf.parent
 	}
+
+	for i := len(bits) - 1; i >= 0; i-- {
+		var err error
+		if bits[i] {
+			err = w.WriteOne()
+		} else {
+			err = w.WriteZero()
+		}
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (tree *Tree) hasMultipleRoots() bool {
@@ -148,6 +159,7 @@ type Leaf struct {
 	parent *Leaf
 	freq   int
 	value  string
+	bin    string
 }
 
 func CalculateValueLeafs(s string) []*Leaf {

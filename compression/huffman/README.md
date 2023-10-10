@@ -8,189 +8,121 @@ will be represented with which bit-string. This tree is created using a
 huffman tree. Take for example the following string:
 
 ```
-This is an example of the huffman tree.
+wooooooow this is short
 ```
 
 1. Create a list of all the letters with their frequencies:
 
    | Letter | Frequency |
    |--------|-----------|
-   |        | 7         |
-   | .      | 1         |
-   | ,      | 1         |
-   | a      | 3         |
-   | b      | 0         |
-   | c      | 0         |
-   | d      | 0         |
-   | e      | 5         |
-   | f      | 3         |
-   | g      | 0         |
-   | h      | 3         |
-   | i      | 2         |
-   | j      | 0         |
-   | k      | 0         |
-   | l      | 1         |
-   | m      | 2         |
-   | n      | 2         |
-   | o      | 1         |
-   | p      | 1         |
-   | q      | 0         |
-   | r      | 1         |
-   | s      | 2         |
+   | w      | 2         |
+   | o      | 8         |
+   |        | 3         |
    | t      | 2         |
-   | u      | 1         |
-   | v      | 0         |
-   | w      | 0         |
-   | x      | 1         |
-   | y      | 0         |
-   | z      | 0         |
-   | T      | 1         |
+   | h      | 2         |
+   | i      | 2         |
+   | s      | 3         |
+   | r      | 1         |
 
 2. Order the list by frequency (and leave the 0 frequencies out)
 
    | Letter | Frequency |
    |--------|-----------|
-   |        | 7         |
-   | e      | 5         |
-   | a      | 3         |
-   | f      | 3         |
-   | h      | 3         |
-   | i      | 2         |
-   | m      | 2         |
-   | n      | 2         |
-   | s      | 2         |
-   | t      | 2         |
-   | .      | 1         |
-   | l      | 1         |
-   | o      | 1         |
-   | p      | 1         |
    | r      | 1         |
-   | u      | 1         |
-   | x      | 1         |
-   | T      | 1         |
+   | w      | 2         |
+   | t      | 2         |
+   | h      | 2         |
+   | i      | 2         |
+   |        | 3         |
+   | s      | 3         |
+   | o      | 8         |
 
 3. Create a binary tree
 
    Make a binary leaf of the least frequent letters and repeat.
 
    ```
-   ' '7 e5 h3 f3 a3 i2 s2 m2 n2 t2 .1 T1 p1 l1 o1 u1 r1 x1
+   r(1) w(2)
+      \ /
+     rw(3)
+
+   r(1) w(2)  t(2) h(2)
+      \ /        \ /
+     rw(3)      th(4)
    
-   ' '7 e5 h3 f3 a3 i2 s2 m2 n2 t2 .T2    pl2    ou2    rx2
-                                   / \    / \    / \    / \
-                                  .1 T1  p1 l1  o1 u1  r1 x2
+     r(1) w(2)  t(2) h(2)
+        \ /        \ /
+   i(2) rw(3)      th(4)
+      \ /
+     irw(6)
    
-   ' '7 e5 h3 f3  ai5    sm4    nt4     .Tpl4          ourx4
-                  / \    / \    / \      /  \          /  \
-                 a3 i2  s2 m2  n2 t2  .T2    pl2    ou2    rx2
-                                      / \    / \    / \    / \
-                                     .1 T1  p1 l1  o1 u1  r1 x2
-   
-   ' '7 e5  af6    ai5    sm4    nt4      .Tpl4          ourx4
-            / \    / \    / \    / \       /  \          /  \
-           h3 f3  a3 i2  s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
-   
-   ' '7 e5  af6    ai5       smnt8             .Tplourx8
-            / \    / \      /    \             /       \
-           h3 f3  a3 i2   sm4    nt4      .Tpl4          ourx4
-                          / \    / \       /  \          /  \
-                         s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
-   
-   ' '7  hf6    eai10        smnt8             .Tplourx8
-         / \     / \        /    \             /       \
-        h3 f3  e5  ai5    sm4    nt4      .Tpl4          ourx4
-                   / \    / \    / \       /  \          /  \
-                  a3 i2  s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
-   
-     ' 'hf13    eai10        smnt8             .Tplourx8
-      /  \       / \        /    \             /       \
-   ' '7  hf6   e5  ai5    sm4    nt4      .Tpl4          ourx4
-         / \       / \    / \    / \       /  \          /  \
-        h3 f3     a3 i2  s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
-   
-     ' 'hf13    eai10              mnst.lopruxT16
-      /  \       / \               /           \
-   ' '7  hf6   e5  ai5        smnt8             .Tplourx8
-         / \       / \       /    \             /       \
-        h3 f3     a3 i2    sm4    nt4      .Tpl4          ourx4
-                          / \    / \       /  \          /  \
-                         s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
-   
-          ' 'hfeai23               mnst.lopruxT16
-            /  \                   /           \
-     ' 'hf13    eai10         smnt8             .Tplourx8
-      /  \       / \         /    \             /       \
-   ' '7  hf6   e5  ai5     sm4    nt4      .Tpl4          ourx4
-         / \       / \    / \    / \       /  \          /  \
-        h3 f3     a3 i2  s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
-   
-               ' 'hfeaimnst.lopruxT39
-                    /            \
-         ' 'hfeai23               mnst.lopruxT16
-           /  \                   /           \
-    ' 'hf13    eai10         smnt8             .Tplourx8
-     /  \       / \         /    \             /       \
-   ' '7  hf6   e5  ai5     sm4    nt4      .Tpl4          ourx4
-         / \       / \    / \    / \       /  \          /  \
-        h3 f3     a3 i2  s2 m2  n2 t2   .T2    pl2    ou2    rx2
-                                        / \    / \    / \    / \
-                                       .1 T1  p1 l1  o1 u1  r1 x2
+   t(2) h(2)    r(1) w(2)   (3) s(3)
+      \ /          \ /        \ /
+      th(4)   i(2) rw(3)       s(6)
+                 \ /
+                irw(5)
+              
+                r(1) w(2)                     
+                   \ /                         
+   t(2) h(2)   i(2) rw(3)    (3) s(3)
+      \ /         \ /          \ /
+     th(4)       irw(5)         s(6)
+         \       /
+          thirw(9)
+              
+                r(1) w(2)
+                   \ /
+   t(2) h(2)   i(2) rw(3)   (3) s(3)
+      \ /         \ /         \ /
+     th(4)       irw(5)        s(6) o(8)      
+         \       /                \ /     
+          thirw(9)                so(14)
+              
+                r(1) w(2)          
+                   \ /              
+   t(2) h(2)   i(2) rw(3)   (3) s(3)
+      \ /         \ /         \ /
+     th(4)       irw(5)        s(6) o(8)      
+         \       /                \ /     
+          thirw(9)                so(14)
+                  \              /
+                    thirw so(23)
    ```
    
    This leads to the following tree
  
    ```
-         ' 'hfeaismnt.Tplourx
-              /         \
-       ' 'hfeai         smnt.Tplourx
-        /    \          /         \
-    ' 'hf    eai     smnt         .Tplourx
-     /  \    / \     /   \        /      \
-   ' '  hf   e ai   sm   nt    .Tpl      ourx
-        / \    / \  / \  / \   /   \     /   \
-        h f    a i  s m  n t  .T   pl   ou   rx
-                              / \  / \  / \  / \
-                              . T  p l  o u  r x
+          r w          
+          \ /              
+   t h   i rw    s
+   \ /   \ /   \ /
+   th    irw     s o      
+    \    /       \ /     
+     thirw       so
+         \       /
+         thirw so
    ```
    
 4. When encoding add a 0 when turning left in the tree and 1 when turning right.
    This results in the following tree with values.
 
    ```
-                                     ' 'hfeaismnt.Tplourx
-                         /                                          \
-              ' 'hfeai=0                                              smnt.Tplourx=1
-              /         \                                  /                                 \
-      ' 'hf=00           eai=01                    smnt=10                                     .Tplourx=11
-         /  \              / \                      /    \                               /                     \
-   ' '=000  hf=001    e=010  ai=011          sm=100        nt=101               .Tpl=110                         ourx=111
-             / \               / \            / \            / \              /         \                        /       \
-        h=0010 f=0011     a=0110 i=0111  s=1000 m=1001  n=1010 t=1011  .T=1100           pl=1101          ou=1110         rx=1111
-                                                                          / \              / \              / \              / \
-                                                                    .=11000 T=11001  p=11000 l=11011  o=11100 u=11101  r=11110 x=11111
+                    r(0110) w(0111)
+                          \ /              
+   t(000) h(001)  i(010) rw(011)   (100) s(101)
+      \ /              \ /             \ /
+     th(00)           irw(01)          s(10) o(11)
+           \         /                     \ /     
+            thirw(0)                    so(1)
+                  \                  /
+                         thirw so
    ```
    
    This results for our text in:
    
    ```
-   T     h    i    s        i    s        a    n        e   x     a    m    p     l     e       o     f        t    h    e       h    u     f    f    m    a    n        t    r     e   e   .
-   11000 0010 0111 1000 000 0111 1000 000 0110 1010 000 010 11111 0110 1001 11000 11011 010 000 11100 0011 000 1011 0010 010 000 0010 11101 0011 0011 1001 0110 1010 000 1011 11110 010 010 11000
-   ```
-
-   ```
-   11111011001111010000011110100000010100100001011110001010001101111001010000110000011000101101100100000110111010011001110000010100100010111110001001011000
+   w    o  o  o  o  o  o  o  w        t   h   i   s       i   s       s   h   o  r    t
+   0111-11-11-11-11-11-11-11-0111-100-000-001-010-101-100-010-101-100-101-001-11-0110-000
    ```
    
    This results in 152 bits or 19 bytes. The decoded text exists as 39 bytes.
@@ -198,7 +130,4 @@ This is an example of the huffman tree.
 5. To decode the string just follow the same path in the tree.
    
    ```
-   111110110011110100000111...
-   rrrrrlrrllrrrrlrllllrlll
-       T   h   i   s      i...
    ```
