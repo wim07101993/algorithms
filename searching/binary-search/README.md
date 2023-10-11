@@ -6,8 +6,8 @@ search value. If items are equal, the search is done. Else the search continues
 only in the half in which the element can lie. 
 
 In a linear searching algorithm the worst time it will take to find an item is
-$\O(n)$ where n is the number of elements in the list. Binary search reduces 
-this time to $\O(log(n))$. This is only an improvement when the list is not
+$O(n)$ where n is the number of elements in the list. Binary search reduces 
+this time to $O(log(n))$. This is only an improvement when the list is not
 small.
 
 This algorithm only works on sorted lists.
