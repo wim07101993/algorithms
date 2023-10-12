@@ -1,21 +1,16 @@
 package insert_sort
 
-func Sort[T interface{}](list []T, comparer func(a, b T) int) []T {
-	var ret []T
-	for i, a := range list {
-		added := false
-		for j, b := range ret {
-			cmp := comparer(a, b)
-			if cmp < 0 {
-				ret = append(ret[:j+1], ret[j:]...)
-				ret[j] = list[i]
-				added = true
+func Sort(list []int) {
+	for next := 1; next < len(list); next++ {
+		previous := next - 1
+		current := next
+		for previous >= 0 {
+			if list[current] >= list[previous] {
 				break
 			}
-		}
-		if !added {
-			ret = append(ret, list[i])
+			list[current], list[previous] = list[previous], list[current]
+			previous--
+			current--
 		}
 	}
-	return ret
 }
