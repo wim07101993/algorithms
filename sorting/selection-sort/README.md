@@ -1,9 +1,7 @@
 # Selection sort
 
-Selection sort uses two lists, a sorted and unsorted. It repeatedly searches
-for the next smallest number in the unsorted list and adds it to the sorted
-list. This algorithm is less performant than some other algorithms like 
-insert-sorting but uses less write operations.
+Selection sort is an in place sorting algorithm. It iterates over the list and
+swaps the current item with the next smallest item.
 
 E.g.:
 ```
@@ -12,16 +10,18 @@ E.g.:
 
 would sort like this:
 ```
-2
-2, 2
-2, 2, 3
-2, 2, 3, 4
-2, 2, 3, 4, 5
-2, 2, 3, 4, 5, 6
-2, 2, 3, 4, 5, 6, 7
-2, 2, 3, 4, 5, 6, 7, 8
+2, 5, 6, 3, 8, 4 ,7 ,9, 1
+1, 5, 6, 3, 8, 4 ,7 ,9, 2
+1, 2, 6, 3, 8, 4 ,7 ,9, 5
+1, 2, 3, 6, 8, 4 ,7 ,9, 5
+1, 2, 3, 4, 8, 6 ,7 ,9, 5
+1, 2, 3, 4, 5, 6 ,7 ,9, 8
+1, 2, 3, 4, 5, 6 ,7 ,9, 8
+1, 2, 3, 4, 5, 6 ,7 ,9, 8
 1, 2, 3, 4, 5, 6, 7, 8, 9
 ```
+
+![image](https://upload.wikimedia.org/wikipedia/commons/9/94/Selection-Sort-Animation.gif)
 
 This algorithm uses a time of $O(n^2)$ to sort. Making it impractical to use 
 with large lists.
