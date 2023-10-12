@@ -26,5 +26,7 @@ would sort like this:
 1, 2, 3, 4, 5, 6, 7, 8, 9
 ```
 
+![image](https://upload.wikimedia.org/wikipedia/commons/0/0f/Insertion-sort-example-300px.gif)
+
 The performance of this algorithm varies between $O(n)$ and $O(n^2)$ where
 $O(n)$ is on an already sorted list and $O(n^2)$ on a reverse sorted list.
